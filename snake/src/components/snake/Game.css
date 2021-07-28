@@ -1,0 +1,10 @@
+@import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
+
+.snake-game button,
+.snake-game p {
+    font-family: "Press Start 2P", serif;
+}
+
+.snake-game button {
+    padding: 10px;
+}

@@ -1,0 +1,15 @@
+# OS
+.DS_Store
+
+# IDE
+.idea/
+
+# Node
+*.log
+npm-debug.log*
+dist/
+node_modules/
+.npm
+.eslintcache
+*.env
+build/
