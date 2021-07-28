@@ -1,7 +1,7 @@
 version: '3'
 services:
   node:
-    container_name: demo_ts
+    container_name: snake_ts
     image: node:14-buster
     volumes:
       - './:/var/www/api'

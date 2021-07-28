@@ -1,10 +1,39 @@
 import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import './Game.css';
 import useInterval from '../../hooks/UseInterval';
-import { Coordinate, DirectionValue, GameProps } from './Config';
 
-const getInitSnake = (c: number, h: number): Coordinate[] => {
+export type Coordinate = {
+  x: number;
+  y: number;
+};
+
+export enum DirectionValue {
+  DEFAULT = 'right',
+  LEFT = 'left',
+  UP = 'up',
+  RIGHT = 'right',
+  DOWN = 'down',
+}
+
+export type GameProps = {
+  canvasWidth: number;
+  canvasHeight: number;
+  cell: number;
+  speed: number;
+  backgroundColour: string;
+  objectColour: string;
+  leftKey: string;
+  upKey: string;
+  rightKey: string;
+  downKey: string;
+};
+
+const getInitSnake = (c: number, w: number, h: number): Coordinate[] => {
   const y = Math.floor(h / c / 2) * c;
+
+  if (3 * c > w || y + c > h) {
+    throw new Error('no enough room to init snake');
+  }
 
   return [
     { x: 3 * c, y },
@@ -163,7 +192,7 @@ const Game: React.FC<GameProps> = ({
 
   const [apple, setApple] = useState<Coordinate | null>(null);
   const [snake, setSnake] = useState<Coordinate[]>(() =>
-    getInitSnake(cell, canvasHeight)
+    getInitSnake(cell, canvasWidth, canvasHeight)
   );
   const [direction, dispatchDirection] = useReducer(
     directionReducer,
@@ -211,6 +240,7 @@ const Game: React.FC<GameProps> = ({
 
         setSnake(newSnake);
       } catch (e) {
+        // eslint-disable-next-line
         console.log(e);
         setPlaying(false);
         setGameOver(true);
@@ -243,13 +273,13 @@ const Game: React.FC<GameProps> = ({
 
   useEffect(() => {
     if (isPlaying && isGameOver) {
-      setSnake(getInitSnake(cell, canvasHeight));
+      setSnake(getInitSnake(cell, canvasWidth, canvasHeight));
       dispatchDirection(DirectionValue.DEFAULT);
       setApple(null);
       setScore(0);
       setGameOver(false);
     }
-  }, [cell, canvasHeight, isPlaying, isGameOver]);
+  }, [cell, canvasWidth, canvasHeight, isPlaying, isGameOver]);
 
   function setKeyboardResp(
     m: Record<string, DirectionValue>
